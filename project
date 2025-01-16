@@ -1,0 +1,119 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
+class Room {
+    int roomNumber;
+    String roomType;
+    boolean isBooked;
+
+    Room(int roomNumber, String roomType) {
+        this.roomNumber = roomNumber;
+        this.roomType = roomType;
+        this.isBooked = false;
+    }
+
+    void displayRoomDetails() {
+        System.out.println("Room Number: " + roomNumber + ", Type: " + roomType + ", Status: " + (isBooked ? "Booked" : "Available"));
+    }
+}
+
+class Customer {
+    String name;
+    int roomNumber;
+
+    Customer(String name, int roomNumber) {
+        this.name = name;
+        this.roomNumber = roomNumber;
+    }
+
+    void displayCustomerDetails() {
+        System.out.println("Customer Name: " + name + ", Room Number: " + roomNumber);
+    }
+}
+
+public class HotelManagementSystem {
+    static ArrayList<Room> rooms = new ArrayList<>();
+    static ArrayList<Customer> customers = new ArrayList<>();
+    static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        initializeRooms();
+        while (true) {
+            System.out.println("\n--- Hotel Management System ---");
+            System.out.println("1. Display Rooms");
+            System.out.println("2. Book Room");
+            System.out.println("3. Display Customers");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    displayRooms();
+                    break;
+                case 2:
+                    bookRoom();
+                    break;
+                case 3:
+                    displayCustomers();
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        }
+    }
+
+    static void initializeRooms() {
+        rooms.add(new Room(101, "Single"));
+        rooms.add(new Room(102, "Single"));
+        rooms.add(new Room(201, "Double"));
+        rooms.add(new Room(202, "Double"));
+        rooms.add(new Room(301, "Suite"));
+    }
+
+    static void displayRooms() {
+        System.out.println("\n--- Room Details ---");
+        for (Room room : rooms) {
+            room.displayRoomDetails();
+        }
+    }
+
+    static void bookRoom() {
+        System.out.print("\nEnter your name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter room number to book: ");
+        int roomNumber = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        for (Room room : rooms) {
+            if (room.roomNumber == roomNumber) {
+                if (room.isBooked) {
+                    System.out.println("Room is already booked.");
+                    return;
+                } else {
+                    room.isBooked = true;
+                    customers.add(new Customer(name, roomNumber));
+                    System.out.println("Room booked successfully!");
+                    return;
+                }
+            }
+        }
+        System.out.println("Invalid room number.");
+    }
+
+    static void displayCustomers() {
+        if (customers.isEmpty()) {
+            System.out.println("\nNo customers found.");
+        } else {
+            System.out.println("\n--- Customer Details ---");
+            for (Customer customer : customers) {
+                customer.displayCustomerDetails();
+            }
+        }
+    }
+}
